@@ -23,7 +23,6 @@ return [
         ],
     ],
 
-    // ✅ Google Sheet — top level, not inside slack
     'google_sheet_products_url' => env('GOOGLE_SHEET_PRODUCTS_URL'),
 
 ];
