@@ -397,7 +397,7 @@
                     @endif
 
                     @if($product->image_url)
-                        <img class="card-img" src="{{ $product->image_url }}" alt="{{ $product->name }}" loading="lazy">
+                        <img class="card-img" src="{{ $product->image_url }}" alt="{{ $product->name }}" loading="lazy" style="background-image: contain">
                     @else
                         <div class="card-img-placeholder">🛍️</div>
                     @endif

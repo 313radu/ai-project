@@ -2,8 +2,13 @@
     "$schema": "https://www.schemastore.org/package.json",
     "private": true,
     "type": "module",
+    "engines": {
+        "node": "26.x",
+        "npm": "11.x"
+    },
     "scripts": {
         "build": "vite build",
+        "heroku-postbuild": "npm run build",
         "dev": "vite"
     },
     "devDependencies": {
