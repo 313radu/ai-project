@@ -171,7 +171,6 @@
         }
     </style>
     @include('partials.theme-product')
-    @include('partials.theme-product')
 </head>
 <body>
 
