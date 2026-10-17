@@ -170,6 +170,8 @@
             .price-main { font-size: 1.6rem; }
         }
     </style>
+    @include('partials.theme-product')
+    @include('partials.theme-product')
 </head>
 <body>
 
