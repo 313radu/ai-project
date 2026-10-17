@@ -28,9 +28,14 @@ class GoogleSheetProductImporter
         }
 
         try {
+            $url = $this->sheetUrl
+                .(str_contains($this->sheetUrl, '?') ? '&' : '?')
+                .'_cb='.time();
+
             $response = Http::connectTimeout(5)
                 ->timeout(30)
-                ->get($this->sheetUrl);
+                ->withHeaders(['Cache-Control' => 'no-cache'])
+                ->get($url);
 
             if (! $response->successful()) {
                 Log::error('GoogleSheetImporter: Failed to fetch sheet', [

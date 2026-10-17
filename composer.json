@@ -80,8 +80,15 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
-        }
+        },
+        "compile": [
+    "@php artisan config:clear",
+    "npm install --ignore-scripts",
+    "npm run build"
+]
+
     },
+    
     "minimum-stability": "stable",
     "prefer-stable": true
 }
