@@ -248,7 +248,7 @@
 
             {{-- CTA --}}
             <div class="actions">
-                <a href="{{ route('products.redirect', $product->slug) }}" class="btn-buy" target="_blank" rel="noopener">
+                <a href="{{ route('products.go', $product->slug) }}" class="btn-buy" target="_blank" rel="noopener">
                     🛒 Cumpără acum
                 </a>
                 <a href="/products" class="btn-back-alt">← Toate produsele</a>

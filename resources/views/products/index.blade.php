@@ -423,7 +423,7 @@
 
                         <div class="card-actions">
                             <a href="{{ route('products.show', $product->slug) }}" class="btn-detail">Detalii</a>
-                            <a href="{{ route('products.redirect', $product->slug) }}" class="btn-buy" target="_blank" rel="noopener">Cumpără →</a>
+                            <a href="{{ route('products.go', $product->slug) }}" class="btn-buy" target="_blank" rel="noopener">Cumpără →</a>
                         </div>
                     </div>
                 </div>

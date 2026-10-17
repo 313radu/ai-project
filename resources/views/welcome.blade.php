@@ -304,8 +304,8 @@
                     <span class="card-price">
                         {{ number_format($product->price, 2) }} RON
                     </span>
-                    @if($product->original_price && $product->original_price > $product->price)
-                        <span class="card-price-old">{{ number_format($product->original_price, 2) }}</span>
+                    @if($product->old_price && $product->old_price > $product->price)
+                        <span class="card-price-old">{{ number_format($product->old_price, 2) }} {{ $product->currency ?? 'RON' }}</span>
                     @endif
                 </div>
                 <a href="{{ route('products.go', $product->slug) }}" class="btn-buy" target="_blank" rel="noopener">
@@ -320,7 +320,7 @@
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         <h3>No products yet</h3>
         <p>Import your Google Sheet or add products to see them here.</p>
-        <a href="/products/sync">Sync products →</a>
+        <a href="{{ route('products.index') }}">View products →</a>
     </div>
     @endforelse
 </div>
