@@ -20,3 +20,4 @@ Route::get('/products/{product:slug}',    [ProductController::class, 'show'])->n
 Route::get('/go/{product:slug}',          [ProductController::class, 'redirect'])->name('products.go');
 
 Route::post('/ai-chat', [AiChatController::class, 'ask'])->name('ai.chat');
+Route::post('/ai-chat', [AiChatController::class, 'ask'])->middleware('throttle:20,1')->name('ai.chat');

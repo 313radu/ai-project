@@ -24,5 +24,14 @@ return [
     ],
 
     'google_sheet_products_url' => env('GOOGLE_SHEET_PRODUCTS_URL'),
+    'google_sheet_products_url' => env('GOOGLE_SHEET_PRODUCTS_URL'),
+
+    'gemini' => [
+        'key'   => env('GEMINI_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-3.8-flash'),
+
+    ],
 
 ];
+
+

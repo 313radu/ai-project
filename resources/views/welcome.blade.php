@@ -348,29 +348,65 @@
         }
     })();
 
-    // AI Search
+    // AI Search (Gemini)
     const askBtn = document.getElementById('ask-btn');
     const searchInput = document.getElementById('search-input');
     const aiResponse = document.getElementById('ai-response');
     const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    let history = [];
 
     askBtn.addEventListener('click', async () => {
         const message = searchInput.value.trim();
         if (!message) return;
         aiResponse.textContent = '⏳ Thinking…';
         aiResponse.classList.add('visible');
+        askBtn.disabled = true;
         try {
             const res = await fetch('/ai-chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' },
-                body: JSON.stringify({ message })
+                body: JSON.stringify({ message, history })
             });
             const data = await res.json();
-            aiResponse.textContent = data.reply ?? 'No reply received.';
+            const reply = data.reply ?? 'No reply received.';
+
+            aiResponse.textContent = '';
+            const p = document.createElement('p');
+            p.style.whiteSpace = 'pre-wrap';
+            p.textContent = reply;
+            aiResponse.appendChild(p);
+
+            (data.products || []).forEach(prod => {
+                const a = document.createElement('a');
+                a.href = prod.url;
+                a.style.cssText = 'display:flex;gap:12px;align-items:center;margin-top:10px;padding:10px;border:1px solid rgba(0,0,0,.1);border-radius:10px;text-decoration:none;color:inherit';
+                if (prod.image) {
+                    const img = document.createElement('img');
+                    img.src = prod.image; img.width = 56; img.height = 56; img.alt = '';
+                    img.style.cssText = 'object-fit:cover;border-radius:8px';
+                    a.appendChild(img);
+                }
+                const info = document.createElement('span');
+                const b = document.createElement('b');
+                b.textContent = prod.name;
+                info.appendChild(b);
+                info.appendChild(document.createElement('br'));
+                info.appendChild(document.createTextNode(`${prod.price} ${prod.currency ?? ''}`));
+                a.appendChild(info);
+                aiResponse.appendChild(a);
+            });
+
+            history.push({ role: 'user', text: message }, { role: 'model', text: reply });
+            history = history.slice(-10);
         } catch {
-            aiResponse.textContent = '⚠️ Request failed. Check Laravel and Ollama.';
+            aiResponse.textContent = '⚠️ Request failed. Please try again.';
+        } finally {
+            askBtn.disabled = false;
         }
     });
+
+    searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') askBtn.click(); });
+
 
     searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') askBtn.click(); });
 </script>
