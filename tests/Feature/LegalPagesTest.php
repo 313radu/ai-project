@@ -14,7 +14,8 @@ class LegalPagesTest extends TestCase
         $this->get(route('privacy'))
             ->assertOk()
             ->assertSee('Privacy policy')
-            ->assertSee('data-cookie-consent', false);
+            ->assertSee('data-cookie-consent', false)
+            ->assertSee('data-newsletter-popup', false);
 
         $this->get(route('cookies'))
             ->assertOk()
@@ -27,6 +28,7 @@ class LegalPagesTest extends TestCase
         $this->get(route('home'))
             ->assertOk()
             ->assertSee('data-cookie-consent', false)
-            ->assertSee('Only necessary');
+            ->assertSee('Only necessary')
+            ->assertSee('data-newsletter-form', false);
     }
 }

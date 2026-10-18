@@ -147,6 +147,85 @@ if (cookieConsent) {
     }
 }
 
+const newsletterPopup = document.querySelector('[data-newsletter-popup]');
+
+if (newsletterPopup) {
+    const newsletterForm = newsletterPopup.querySelector('[data-newsletter-form]');
+    const newsletterInput = newsletterPopup.querySelector('#newsletter-email');
+    const newsletterError = newsletterPopup.querySelector('[data-newsletter-error]');
+    const newsletterSuccess = newsletterPopup.querySelector('[data-newsletter-success]');
+    const newsletterStorageKey = 'ai-deals-newsletter-status';
+    let newsletterTimer;
+
+    const getNewsletterStatus = () => window.localStorage.getItem(newsletterStorageKey);
+
+    const closeNewsletter = () => {
+        newsletterPopup.hidden = true;
+        document.body.classList.remove('newsletter-is-open');
+    };
+
+    const openNewsletter = (force = false) => {
+        if (!force && ['dismissed', 'joined'].includes(getNewsletterStatus())) {
+            return;
+        }
+
+        if (getNewsletterStatus() === 'joined') {
+            return;
+        }
+
+        newsletterPopup.hidden = false;
+        document.body.classList.add('newsletter-is-open');
+        newsletterInput.focus();
+    };
+
+    const scheduleNewsletter = () => {
+        window.clearTimeout(newsletterTimer);
+        newsletterTimer = window.setTimeout(() => {
+            const consentWasHandled = !cookieConsent || document.cookie.includes('ai_deals_cookie_consent=');
+
+            if (consentWasHandled) {
+                openNewsletter();
+            }
+        }, 5500);
+    };
+
+    newsletterPopup.querySelectorAll('[data-newsletter-close]').forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+            window.localStorage.setItem(newsletterStorageKey, 'dismissed');
+            closeNewsletter();
+        });
+    });
+
+    document.querySelectorAll('[data-newsletter-open]').forEach((trigger) => {
+        trigger.addEventListener('click', () => openNewsletter(true));
+    });
+
+    newsletterForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        newsletterError.hidden = true;
+
+        if (!newsletterInput.checkValidity()) {
+            newsletterError.hidden = false;
+            newsletterInput.focus();
+            return;
+        }
+
+        window.localStorage.setItem(newsletterStorageKey, 'joined');
+        newsletterForm.hidden = true;
+        newsletterSuccess.hidden = false;
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !newsletterPopup.hidden) {
+            window.localStorage.setItem(newsletterStorageKey, 'dismissed');
+            closeNewsletter();
+        }
+    });
+
+    window.addEventListener('ai-deals:consent-change', scheduleNewsletter);
+    scheduleNewsletter();
+}
+
 const aiForm = document.querySelector('[data-ai-form]');
 
 if (aiForm) {
