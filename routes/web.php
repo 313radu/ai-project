@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AiChatController;
 use App\Http\Controllers\ProductController;
 use App\Models\Product;
+use Illuminate\Support\Facades\Route;
 
 // Homepage — passes latest active products to welcome.blade.php
 Route::get('/', function () {
@@ -11,13 +11,18 @@ Route::get('/', function () {
         ->orderBy('created_at', 'desc')
         ->limit(12)
         ->get();
+
     return view('welcome', compact('products'));
 })->name('home');
 
 // Products
-Route::get('/products',                   [ProductController::class, 'index'])->name('products.index');
-Route::get('/products/{product:slug}',    [ProductController::class, 'show'])->name('products.show');
-Route::get('/go/{product:slug}',          [ProductController::class, 'redirect'])->name('products.go');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/go/{product:slug}', [ProductController::class, 'redirect'])->name('products.go');
+
+// Legal and privacy pages
+Route::view('/privacy-policy', 'privacy')->name('privacy');
+Route::view('/cookie-policy', 'cookies')->name('cookies');
 
 Route::post('/ai-chat', [AiChatController::class, 'ask'])->name('ai.chat');
 Route::post('/ai-chat', [AiChatController::class, 'ask'])->middleware('throttle:20,1')->name('ai.chat');
